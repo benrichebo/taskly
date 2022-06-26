@@ -1,0 +1,56 @@
+@import "variables";
+@import "base";
+
+@import "bootstrap/scss/bootstrap";
+
+body {
+  --bs-primary: #ffe083;--bs-primary-rgb: 255,224,131;
+}
+.btn-primary, .bg-primary {
+ background-color: #ffe083;
+ border-color: #ffe083;
+ color:#212529
+}
+.btn-primary:hover{
+ background-color: #fbd666;
+ border-color: #fbd666;
+ box-shadow: 0 0 0 0.25rem #ffe083;
+}
+
+.btn-primary:focus{
+ background-color: #fbd666;
+ border-color: #fbd666;
+ box-shadow: none;
+}
+.rounded {
+    border-radius: 1rem !important
+}
+
+.sticky-sidebar {
+    position: sticky;
+    top: 0;
+    display: block !important; 
+}
+
+.avatar-list-item {
+    margin-right: -7px !important;
+}
+
+.avatar-img {
+    border: 3px solid #ffe083 !important
+}
+
+@media(max-width: 1240px){
+    .display-4{
+        font-size: calc(1.175rem + 2.7vw) !important
+    }
+}
+
+.form-control:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #ced4da;
+  outline: 0!important;
+  box-shadow: 0!important;
+}
+

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AddTaskModal from "../components/AddTaskModal";
 import { MdAdd, MdAccessAlarm, MdCheck, MdEast } from "react-icons/md";
 import { HiMinus } from "react-icons/hi";
@@ -6,6 +6,8 @@ import moment from "moment";
 import Layout from "../components/Layout";
 
 function Tasks() {
+
+
   const [time, setTime] = useState(moment().format("h:mm:ss a"));
 
   return (

@@ -2,6 +2,7 @@ import React from "react";
 import AddTaskModal from "../components/AddTaskModal";
 import { MdAdd, MdAccessAlarm, MdCheck, MdEast } from "react-icons/md";
 import { HiMinus } from "react-icons/hi";
+import moment from "moment";
 
 function Tasks() {
   return (
@@ -310,7 +311,7 @@ function Tasks() {
             <div className="my-5">
               <div className="card border-0 shadow-none rounded bg-light p-lg-1 p-xl-3">
                 <div className="card-body px-0 px-md-3">
-                  <h1 className="display-4 fw-bold card-title mb-2">8:45 AM</h1>
+                  <h1 className="display-4 fw-bold card-title mb-2">{moment().format('MMMM Do YYYY, h:mm:ss a')}</h1>
                   <div className="d-flex justify-content-start">
                     <i
                       className="fas fa-cloud-sun fs-4 text-primary"

@@ -1,20 +1,24 @@
-import { find } from "../db/find";
+import { find, findOne } from "../db/find";
 import { verifyUser } from "../verification";
 
 export default async (req, res) => {
   const { userId, role } = await verifyUser(req);
 
-  if (userId && role == "manager") {
+  if (userId) {
     if (req.method == "GET") {
-      const businesses = await find("businesses", { managerId: userId });
+      const tasks = await findOne(
+        "tasks",
+        { _id: ObjectId(userId) },
+        { projection: { tasks: 1 } }
+      );
 
-      if (businesses?.length >= 0) {
-        res.status(200).json(businesses);
+      if (tasks?._id) {
+        res.status(200).json(tasks);
       } else {
-        res.status(400).json({ msg: "There are no businesses" });
+        res.status(400).json({ msg: "There are no tasks" });
       }
     }
   } else {
-    res.status(400).json({ msg: "You are not authorized" });
+    res.status(400).json({ msg: "Invalid method" });
   }
 };

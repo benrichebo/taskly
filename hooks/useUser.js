@@ -3,16 +3,14 @@ import { GET } from "../functions/GET";
 import { LOGIN } from "../functions/LOGIN";
 import { PUT } from "../functions/PUT";
 import { REGISTER } from "../functions/REGISTER";
-import { useLocation } from "./useLocation";
 import { useStorage } from "./useStorage";
 
 export const useUser = (type) => {
   const { sessionStorage } = useStorage();
-  const { userLocation } = useLocation("location");
 
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
   let user = {

@@ -4,11 +4,17 @@ import { MdAdd, MdAccessAlarm, MdCheck, MdEast } from "react-icons/md";
 import { HiMinus } from "react-icons/hi";
 import moment from "moment";
 import Layout from "../components/Layout";
+import { useUser } from "../hooks/useUser";
+import { useRouter } from "next/router";
 
 function Tasks() {
-
-
   const [time, setTime] = useState(moment().format("h:mm:ss a"));
+  const { userData } = useUser("user");
+  const router = useRouter();
+
+  if (!userData.id) {
+    router.push("/");
+  }
 
   return (
     <>

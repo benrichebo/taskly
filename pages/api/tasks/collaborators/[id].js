@@ -9,33 +9,24 @@ export default async (req, res) => {
   const { id } = req.query;
 
   if (req.method == "GET") {
-    const task = await findOne("tasks", {
+    const collaborator = await findOne("tasks", {
       _id: ObjectId(userId),
-      "tasks.id": id,
+      "collaborators.userId": id,
     });
 
-    const collaborators = await findOne("tasks", {
-      _id: ObjectId(userId),
-      "collaborators.id": task?.id,
-    });
-
-    if (task?.id) {
-      res.status(200).json(task, collaborators);
+    if (collaborator?.id) {
+      res.status(200).json(collaborator);
     } else {
-      res.status(400).json({ msg: "There are no tasks" });
+      res.status(400).json({ msg: "There is no collaborator for this task" });
     }
   }
 
   if (req.method == "PUT") {
-    const { title, description, startDate, endDate, collaborators } =
-      JSON.parse(req.body);
+    const { name, email } = JSON.parse(req.body);
     const data = {
       $set: {
-        "tasks.$[elem].title": title,
-        "tasks.$[elem].description": description,
-        "tasks.$[elem].startDate": startDate,
-        "tasks.$[elem].endDate": endDate,
-        "tasks.$[elem].collaborators": collaborators,
+        "collaborators.$[elem].name": name,
+        "collaborators.$[elem].email": email,
       },
     };
 
@@ -49,6 +40,8 @@ export default async (req, res) => {
       }
     );
 
+    console.log("results", results);
+
     if (results.matchedCount === 1) {
       res.status(200).json({ msg: "Order updated successfully" });
     } else {
@@ -57,7 +50,7 @@ export default async (req, res) => {
   }
 
   if (method == "DELETE") {
-    const set = { $pull: { tasks: { id: id } } };
+    const set = { $pull: { collaborators: { userId: id } } };
 
     //delete account
     const response = await removeFromArray(

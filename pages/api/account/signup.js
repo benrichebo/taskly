@@ -16,15 +16,15 @@ export default async (req, res) => {
   //1. check for method
   //if method does not exist
   if (req.method !== "POST") {
-    return statusCode405(res);
+    res.status(400).json({ msg: "Invalid method" });
   }
 
   //2. find if user exist in db using email address
   const results = await findOne(
-    "managers",
+    "users",
     { email },
     {
-      projection: { megos: 0 },
+      projection: { email: 1 },
     }
   );
 
@@ -61,7 +61,7 @@ export default async (req, res) => {
         phone: phone,
         role,
       };
-      
+
       res.status(200).json(data);
     } else {
       res.status(404).json({ msg: "Signing up failed" });

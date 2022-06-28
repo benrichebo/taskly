@@ -53,7 +53,7 @@ export const useTasks = (type) => {
 
     async updateTask(credentials, url) {
       setLoading(true);
-      const data = await PUT(body, url);
+      const data = await PUT(credentials, url);
       if (data.msg.includes("successfully")) {
         setMessage(data.msg);
       } else {

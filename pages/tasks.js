@@ -6,10 +6,61 @@ import moment from "moment";
 import Layout from "../components/Layout";
 import { useUser } from "../hooks/useUser";
 import { useRouter } from "next/router";
+import { useTasks } from "../hooks/useTasks";
+import Spinner from "../components/Spinner";
+
+const Attendees = ({ attendees }) => {
+  return (
+    <ul className="list-unstyled list-inline">
+      {attendees?.map((attendee) => (
+        <li className="list-inline-item avatar-list-item">
+          <span className="rounded-circle img-fluid avatar-img border">
+            {attendee.name.charAt(0)}
+          </span>
+        </li>
+      ))}
+
+      <li className="text-muted list-inline-item avatar-list-item ms-2">
+        +{attendees?.length} attendees
+      </li>
+    </ul>
+  );
+};
+
+const Actions = () => {
+  return (
+    <div class="dropdown">
+      <a
+        class="btn btn-secondary"
+        type="button"
+        id="triggerId"
+        data-bs-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false">
+        Dropdown
+      </a>
+      <div class="dropdown-menu" aria-labelledby="triggerId">
+        <a class="dropdown-item" href="#">
+          Edit task
+        </a>
+        <a class="dropdown-item disabled" href="#">
+          Delete task
+        </a>
+        <a class="dropdown-item" href="#">
+          Add attendee
+        </a>
+      </div>
+    </div>
+  );
+};
 
 function Tasks() {
   const [time, setTime] = useState(moment().format("h:mm:ss a"));
   const { userData } = useUser("user");
+
+  //fetch tasks
+  const { data, loading, error, task } = useTasks("tasks");
+
   const router = useRouter();
 
   if (!userData.id) {
@@ -132,177 +183,59 @@ function Tasks() {
                   </a>
                 </div>
               </div>
-              <div className="my-3 d-flex align-items-center">
-                <MdCheck className="fs-3 text-primary me-1" />
+              {loading && (
+                <div className="d-flex justify-content-center align-items-center">
+                  <Spinner />
+                </div>
+              )}
+              {error && (
+                <div className="d-flex justify-content-center align-items-center">
+                  <h4>There was an error loading tasks</h4>
+                  <button
+                    className="btn btn-primary my-3"
+                    onClick={task?.getTasks("/api/tasks")}>
+                    Fetch tasks
+                  </button>
+                </div>
+              )}
+              {data &&
+                data?.map((task) => (
+                  <div className="my-3 d-flex align-items-center">
+                    <MdCheck className="fs-3 text-primary me-1" />
+                    <HiMinus className="fs-3 text-muted me-1" />
+                    <div className="card border-0 shadow-none rounded bg-light w-100">
+                      <div className="card-body pb-0">
+                        <div className="d-flex justify-content-start">
+                          <div className="me-3 bg-white rounded p-1 h-100">
+                            <MdAccessAlarm className="fs-1" />
+                          </div>
+                          <div className="w-100">
+                            <div className="d-flex justify-content-between">
+                              <h6 className="fw-bold">{task?.title}</h6>
+                              <div className="d-flex justify-content-start align-items-center">
+                                <h6 className="fw-normal mb-2 ms-md-4">
+                                  14:00 PM
+                                </h6>
+                                <Actions className="ms-3" />
+                              </div>
+                            </div>
+                            <div className="col-md-9 col-lg-10 col-xxl-8">
+                              {task?.description}
+                              {task.attendees?.length > 0 ? (
+                                <Attendees />
+                              ) : (
+                                <a type="button" className="text-muted small">
+                                  Add attendee
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
 
-                <div className="card border-0 shadow-none rounded bg-primary w-100">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-start align-items-center">
-                      <div className="me-3 bg-white rounded p-1 h-100 me-2">
-                        <MdAccessAlarm className="fs-1" />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex justify-content-between mt-2">
-                          <h6 className="fw-bold">Wake up buddy</h6>
-                          <h6 className="fw-normal">8:00 AM</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="my-3 d-flex align-items-center">
-                <HiMinus className="fs-3 text-muted me-1" />
-                <div className="card border-0 shadow-none rounded bg-light w-100">
-                  <div className="card-body pb-0">
-                    <div className="d-flex justify-content-start align-items-top">
-                      <div className="me-3 bg-white rounded p-1 h-100">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          className="fs-1">
-                          <path
-                            d="M20.2739 9.86883L16.8325 4.95392L18.4708 3.80676L21.9122 8.72167L20.2739 9.86883Z"
-                            fill="currentColor"></path>
-                          <path
-                            d="M18.3901 12.4086L16.6694 9.95121L8.47783 15.687L10.1985 18.1444L8.56023 19.2916L3.97162 12.7383L5.60992 11.5912L7.33068 14.0487L15.5222 8.31291L13.8015 5.8554L15.4398 4.70825L20.0284 11.2615L18.3901 12.4086Z"
-                            fill="currentColor"></path>
-                          <path
-                            d="M20.7651 7.08331L22.4034 5.93616L21.2562 4.29785L19.6179 5.445L20.7651 7.08331Z"
-                            fill="currentColor"></path>
-                          <path
-                            d="M7.16753 19.046L3.72607 14.131L2.08777 15.2782L5.52923 20.1931L7.16753 19.046Z"
-                            fill="currentColor"></path>
-                          <path
-                            d="M4.38208 18.5549L2.74377 19.702L1.59662 18.0637L3.23492 16.9166L4.38208 18.5549Z"
-                            fill="currentColor"></path>
-                        </svg>
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex justify-content-between">
-                          <h6 className="fw-bold">Daily workout</h6>
-                          <h6 className="fw-normal mb-2 ms-md-4">9:00 AM</h6>
-                        </div>
-                        <div className="col-md-9 col-lg-10 col-xxl-8">
-                          <ul>
-                            <li>Squat 10X3</li>
-                            <li>Push up10X3</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="my-3 d-flex align-items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  className="fs-3 text-muted me-1">
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5 10C5 9.44772 5.44772 9 6 9L14 9C14.5523 9 15 9.44772 15 10C15 10.5523 14.5523 11 14 11L6 11C5.44772 11 5 10.5523 5 10Z"
-                    fill="currentColor"></path>
-                </svg>
-                <div className="card border-0 shadow-none rounded bg-light w-100">
-                  <div className="card-body pb-0">
-                    <div className="d-flex justify-content-start">
-                      <div className="me-3 bg-white rounded p-1 h-100">
-                        <img
-                          className="img-fluid rounded"
-                          src="assets/img/Big%20Shoes%20-%20Torso.png"
-                          width="40"
-                          alt="avatar"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex justify-content-between">
-                          <h6 className="fw-bold">Shift project kickoff</h6>
-                          <h6 className="fw-normal mb-2 ms-md-4">14:00 PM</h6>
-                        </div>
-                        <div className="col-md-9 col-lg-10 col-xxl-8">
-                          <p>
-                            Zoom call, kick of with Elena and Jordan from shift
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="my-3 d-flex align-items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  className="fs-3 text-muted me-1">
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5 10C5 9.44772 5.44772 9 6 9L14 9C14.5523 9 15 9.44772 15 10C15 10.5523 14.5523 11 14 11L6 11C5.44772 11 5 10.5523 5 10Z"
-                    fill="currentColor"></path>
-                </svg>
-                <div className="card border-0 shadow-none rounded bg-light w-100">
-                  <div className="card-body pb-0">
-                    <div className="d-flex justify-content-start">
-                      <div className="me-3 bg-white rounded p-1 h-100">
-                        <img
-                          className="img-fluid rounded"
-                          src="/images/avatar.jpg"
-                          width="40"
-                          alt="avatar"
-                        />
-                      </div>
-                      <div className="w-100">
-                        <div className="d-flex justify-content-between">
-                          <h6 className="fw-bold">QR project meeting</h6>
-                          <h6 className="fw-normal mb-2 ms-md-4">11:45 AM</h6>
-                        </div>
-                        <div className="col-md-9 col-lg-10 col-xxl-8">
-                          <p>
-                            Zoom call, kick of with Elena and Jordan from shift
-                          </p>
-                          <ul className="list-unstyled list-inline">
-                            <li className="list-inline-item avatar-list-item">
-                              <img
-                                className="rounded-circle img-fluid avatar-img border"
-                                src="/images/avatar.jpg"
-                                width="35"
-                              />
-                            </li>
-                            <li className="list-inline-item avatar-list-item">
-                              <img
-                                className="rounded-circle img-fluid avatar-img border"
-                                src="/images/avatar.jpg"
-                                width="35"
-                              />
-                            </li>
-                            <li className="list-inline-item avatar-list-item">
-                              <img
-                                className="rounded-circle img-fluid avatar-img border"
-                                src="/images/avatar.jpg"
-                                width="35"
-                              />
-                            </li>
-                            <li className="text-muted list-inline-item avatar-list-item ms-2">
-                              +3 attendees
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <header></header>
             </div>
             <div className="col-12 d-none d-lg-block col-lg-3 px-md-3 px-lg-3 px-xxl-5 sticky-sidebar overflow-auto">

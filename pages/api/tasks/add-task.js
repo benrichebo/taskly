@@ -26,8 +26,6 @@ export default authenticate(async (req, res) => {
 
     const task = {
       ...body,
-      collaborators: [],
-      comments: [],
       createdAt: moment(date).format("lll"),
     };
 

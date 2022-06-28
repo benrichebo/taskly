@@ -8,6 +8,7 @@ export const useTasks = (type) => {
   const { sessionStorage } = useStorage("session");
 
   const [tasks, setTasks] = useState(null);
+  const [taskData, setTaskData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState(null);
@@ -25,10 +26,22 @@ export const useTasks = (type) => {
       setLoading(false);
     },
 
+    async getTask(url) {
+      setLoading(true);
+      const data = await GET({}, url);
+      if (data.msg) {
+        setError(data.msg);
+      } else {
+        sessionStorage.setItem("task", data);
+        setTaskData(data);
+      }
+      setLoading(false);
+    },
+
     async addTask(credentials, url) {
       setError("");
       setLoading(true);
-      //if Momo pay goes through, then use placed-Tasks
+
       const data = await POST(credentials, url);
       if (data.msg.includes("successfully")) {
         setMessage(data.msg);
@@ -38,7 +51,7 @@ export const useTasks = (type) => {
       setLoading(false);
     },
 
-    async updateTask(body, url) {
+    async updateTask(credentials, url) {
       setLoading(true);
       const data = await PUT(body, url);
       if (data.msg.includes("successfully")) {
@@ -70,7 +83,16 @@ export const useTasks = (type) => {
         setTasks(data);
       }
     }
+
+    if (type == "task") {
+      const data = sessionStorage.getItem("task");
+      if (!data) {
+        tasks.getTasks();
+      } else {
+        setTasks(data);
+      }
+    }
   }, []);
 
-  return { task, loading, data: tasksData, error, message };
+  return { task, loading, data: tasks, taskData, error, message };
 };

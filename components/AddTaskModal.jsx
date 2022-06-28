@@ -114,7 +114,7 @@ function AddTaskModal({ task }) {
             </div>
             <div className="modal-footer px-md-3 px-lg-5 border-0">
               {error && <p className="text-danger small">{error}</p>}
-              {message && <p className="text-danger small">{message}</p>}
+              {message && <p className="text-success small">{message}</p>}
               <div className="d-flex justify-content-between">
                 <div className="d-flex justify-content-between">
                   <button

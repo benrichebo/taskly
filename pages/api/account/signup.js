@@ -11,7 +11,7 @@ import { insertOne } from "../db/insert";
 import { createJwt } from "../jwt";
 
 export default async (req, res) => {
-  const { email, password } = JSON.parse(req.body);
+  const { name, email, password } = JSON.parse(req.body);
 
   //1. check for method
   //if method does not exist
@@ -37,9 +37,9 @@ export default async (req, res) => {
     const date = new Date();
 
     const userData = {
+      name,
       email,
       password: hashedPassword,
-      role: "managers",
       createdAt: moment(date).format("lll"),
       verifiedEmail: false,
     };
@@ -47,19 +47,16 @@ export default async (req, res) => {
     const response = await insertOne(userData);
     //fetch user after signup
     if (response.acknowledged === true) {
+      const { _id, name, email } = response;
       const jwt = createJwt({
         userId: _id,
-        email,
-        role,
       });
 
       const data = {
         authToken: jwt,
         id: _id,
-        email: email,
-        fullName: fullName,
-        phone: phone,
-        role,
+        email,
+        name,
       };
 
       res.status(200).json(data);

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useUser } from "../hooks/useUser";
 import Spinner from "./Spinner";
@@ -5,6 +6,7 @@ import Email from "./ui/Email";
 import Password from "./ui/Password";
 
 function Login({ setPage }) {
+  const router =  useRouter()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

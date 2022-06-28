@@ -9,7 +9,7 @@ import { findOne } from "../db/find";
 import { createJwt } from "../jwt";
 
 export default async (req, res) => {
-  const { name, email, password } = JSON.parse(req.body);
+  const { email, password } = JSON.parse(req.body);
 
   //1. check for method
   //if method does not exist

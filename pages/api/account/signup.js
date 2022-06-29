@@ -44,7 +44,7 @@ export default async (req, res) => {
       verifiedEmail: false,
     };
 
-    const response = await insertOne(userData);
+    const response = await insertOne("users", userData);
     //fetch user after signup
     if (response.acknowledged === true) {
       const { _id, name, email } = response;

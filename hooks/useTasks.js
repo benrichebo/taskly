@@ -8,6 +8,7 @@ export const useTasks = (type) => {
   const { sessionStorage } = useStorage("session");
 
   const [tasks, setTasks] = useState(null);
+  const [pinnedTask, setPinnedTask] = useState(null);
   const [taskData, setTaskData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -51,9 +52,46 @@ export const useTasks = (type) => {
       setLoading(false);
     },
 
-    async updateTask(credentials, url) {
+    async pinTask(id) {
+      setError("");
       setLoading(true);
-      const data = await PUT(credentials, url);
+
+      const data = await PUT(id, "/api/tasks/pin-task");
+      if (data.msg.includes("successfully")) {
+        setMessage(data.msg);
+        sessionStorage.setItem("pinned-task", data);
+        this.getPinnedTask;
+      } else {
+        setError(data.msg);
+      }
+      setLoading(false);
+    },
+
+    async deletePinTask(id) {
+      setError("");
+      setLoading(true);
+
+      const data = await DELETE(id, "/api/tasks/pin-task");
+      if (data.msg.includes("successfully")) {
+        setMessage(data.msg);
+        sessionStorage.setItem("pinned-task", data);
+        this.getPinnedTask;
+      } else {
+        setError(data.msg);
+      }
+      setLoading(false);
+    },
+
+    getPinnedTask() {
+      const data = sessionStorage.getItem("pinned-task");
+      if (data) {
+        setPinnedTask(data);
+      }
+    },
+
+    async updateTask(credentials) {
+      setLoading(true);
+      const data = await PUT(credentials, `/api/tasks/${credentials?.id}`);
       if (data.msg.includes("successfully")) {
         setMessage(data.msg);
       } else {
@@ -62,9 +100,9 @@ export const useTasks = (type) => {
       setLoading(false);
     },
 
-    async deleteTask(url) {
+    async deleteTask(id) {
       setLoading(true);
-      const data = await DELETE(url);
+      const data = await DELETE(credentials, `/api/tasks/${id}`);
       if (data.msg.includes("successfully")) {
         setMessage(data.msg);
       } else {
@@ -82,6 +120,7 @@ export const useTasks = (type) => {
       } else {
         setTasks(data);
       }
+      task.getPinnedTask();
     }
 
     if (type == "task") {
@@ -94,5 +133,5 @@ export const useTasks = (type) => {
     }
   }, []);
 
-  return { task, loading, data: tasks, taskData, error, message };
+  return { task, loading, data: tasks, taskData, pinnedTask, error, message };
 };

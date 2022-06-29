@@ -1,4 +1,4 @@
-import { connectToDatabase } from "../../../../lib/mongodb";
+import { connectToDatabase } from "../../../lib/mongodb";
 
 export const update = async (collection, filter, update) => {
   const { db } = await connectToDatabase();

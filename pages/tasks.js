@@ -1,71 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import AddTaskModal from "../components/AddTaskModal";
-import { MdAdd, MdAccessAlarm, MdCheck, MdEast } from "react-icons/md";
-import { HiMinus } from "react-icons/hi";
-import moment from "moment";
+import { MdAdd, MdEast } from "react-icons/md";
 import Layout from "../components/Layout";
 import { useUser } from "../hooks/useUser";
 import { useRouter } from "next/router";
 import { useTasks } from "../hooks/useTasks";
 import Spinner from "../components/Spinner";
-
-const Attendees = ({ attendees }) => {
-  return (
-    <ul className="list-unstyled list-inline">
-      {attendees?.map((attendee) => (
-        <li className="list-inline-item avatar-list-item">
-          <span className="rounded-circle img-fluid avatar-img border">
-            {attendee.name.charAt(0)}
-          </span>
-        </li>
-      ))}
-
-      <li className="text-muted list-inline-item avatar-list-item ms-2">
-        +{attendees?.length} attendees
-      </li>
-    </ul>
-  );
-};
-
-const Actions = () => {
-  return (
-    <div class="dropdown">
-      <a
-        class="btn btn-secondary"
-        type="button"
-        id="triggerId"
-        data-bs-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false">
-        Dropdown
-      </a>
-      <div class="dropdown-menu" aria-labelledby="triggerId">
-        <a class="dropdown-item" href="#">
-          Edit task
-        </a>
-        <a class="dropdown-item disabled" href="#">
-          Delete task
-        </a>
-        <a class="dropdown-item" href="#">
-          Add attendee
-        </a>
-      </div>
-    </div>
-  );
-};
+import PinnedTask from "../components/PinnedTask";
+import TodaysTask from "../components/TodaysTask";
+import RegularTask from "../components/RegularTask";
+import TimeCard from "../components/TimeCard";
+import User from "../components/User";
+import AddAttendeeModal from "../components/AddAttendeeModal";
 
 function Tasks() {
-  const [time, setTime] = useState(moment().format("h:mm:ss a"));
   const { userData } = useUser("user");
 
   //fetch tasks
-  const { data, loading, error, task } = useTasks("tasks");
+  const { data, loading, error, task, pinnedTask } = useTasks("tasks");
 
   const router = useRouter();
 
   if (!userData.id) {
     router.push("/");
   }
+
+  const todaysTask = data; //filter and check todays date
 
   return (
     <>
@@ -90,34 +50,8 @@ function Tasks() {
                     </a>
                   </div>
                 </div>
-                <div className="my-4">
-                  <div className="card border-0 shadow rounded">
-                    <div className="card-body pb-1">
-                      <div className="d-flex">
-                        <div className="bg-primary rounded p-2 h-100 d-flex justify-content-center me-3">
-                          <img
-                            className="img-fluid rounded"
-                            src="/images/avatar.jpg"
-                            width="35"
-                            alt="avatar"
-                          />
-                        </div>
-                        <div>
-                          <h5 className="fw-bold">Call doctor for test</h5>
-                          <h6 className="text-dark mb-2">
-                            15 Mar, 2020 - 9:00 AM
-                          </h6>
-                          <span className="badge rounded-pill bg-primary text-dark myt-2 mb-3 px-2">
-                            Personal
-                          </span>
-                          <p className="fw-normal text-muted">
-                            Ask for a blood test and GYM certificate
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {pinnedTask && <PinnedTask pinnedTask={pinnedTask} />}
+
                 <div className="my-4">
                   <div className="my-3">
                     <div className="card border-0 shadow-none rounded">
@@ -198,76 +132,19 @@ function Tasks() {
                   </button>
                 </div>
               )}
-              {data &&
-                data?.map((task) => (
-                  <div className="my-3 d-flex align-items-center">
-                    <MdCheck className="fs-3 text-primary me-1" />
-                    <HiMinus className="fs-3 text-muted me-1" />
-                    <div className="card border-0 shadow-none rounded bg-light w-100">
-                      <div className="card-body pb-0">
-                        <div className="d-flex justify-content-start">
-                          <div className="me-3 bg-white rounded p-1 h-100">
-                            <MdAccessAlarm className="fs-1" />
-                          </div>
-                          <div className="w-100">
-                            <div className="d-flex justify-content-between">
-                              <h6 className="fw-bold">{task?.title}</h6>
-                              <div className="d-flex justify-content-start align-items-center">
-                                <h6 className="fw-normal mb-2 ms-md-4">
-                                  14:00 PM
-                                </h6>
-                                <Actions className="ms-3" />
-                              </div>
-                            </div>
-                            <div className="col-md-9 col-lg-10 col-xxl-8">
-                              {task?.description}
-                              {task.attendees?.length > 0 ? (
-                                <Attendees />
-                              ) : (
-                                <a type="button" className="text-muted small">
-                                  Add attendee
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              {todaysTask &&
+                todaysTask?.map((task) => (
+                  <TodaysTask key={task?.id} task={task} />
                 ))}
+
+              {data &&
+                data?.map((task) => <RegularTask key={task?.id} task={task} />)}
 
               <header></header>
             </div>
             <div className="col-12 d-none d-lg-block col-lg-3 px-md-3 px-lg-3 px-xxl-5 sticky-sidebar overflow-auto">
-              <div className="d-flex justify-content-between align-items-top mt-4 mb-5">
-                <div>
-                  <h4 className="mb-0">Mark Collins</h4>
-                  <h5 className="text-primary">My settings</h5>
-                </div>
-                <div>
-                  <img
-                    className="img-fluid rounded-circle"
-                    src="/images/avatar.jpg"
-                    width="60"
-                    alt="avatar"
-                  />
-                </div>
-              </div>
-              <div className="my-5">
-                <div className="card border-0 shadow-none rounded bg-light p-lg-1 p-xl-3">
-                  <div className="card-body px-0 px-md-3">
-                    <h1 className="display-4 fw-bold card-title mb-2">
-                      {time}
-                    </h1>
-                    <div className="d-flex justify-content-start">
-                      <i
-                        className="fas fa-cloud-sun fs-4 text-primary"
-                        data-bss-hover-animate="wobble"></i>
-                      <p className="fs-5 ms-2">Now is almost sunny</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <User user={userData} />
+              <TimeCard />
               <div className="my-3">
                 <div className="card border-0 shadow-none rounded bg-light p-lg-1 p-xl-3">
                   <div className="card-body px-0 px-md-3">
@@ -292,6 +169,7 @@ function Tasks() {
           </div>
         </div>
         <AddTaskModal />
+        <AddAttendeeModal task={task} />
       </Layout>
     </>
   );

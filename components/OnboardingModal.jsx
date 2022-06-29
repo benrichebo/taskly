@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ForgotPassword from "./ForgotPassword";
 import Login from "./Login";
 import SignUp from "./SignUp";
@@ -12,7 +12,11 @@ function OnboardingModal() {
         role="document">
         <div className="modal-content">
           <div className="modal-header bg-primary border-primary px-md-3 px-lg-5 border-0">
-            <h4 className="modal-title">Welcome back</h4>
+            <h4 className="modal-title">
+              {page == "forgotPassword" && "Reset your password"}
+              {page == "signUp" && "Create an account"}
+              {page == "login" && "Log into your account"}
+            </h4>
             <button
               type="button"
               className="btn-close rounded p-3 bg-light"
@@ -20,7 +24,7 @@ function OnboardingModal() {
               aria-label="Close"></button>
           </div>
           {page == "login" && <Login setPage={setPage} />}
-          {page == "signUpp" && <SignUp setPage={setPage} />}
+          {page == "signUp" && <SignUp setPage={setPage} />}
           {page == "forgotPassword" && <ForgotPassword setPage={setPage} />}
         </div>
       </div>

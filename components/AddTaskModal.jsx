@@ -51,8 +51,8 @@ function AddTaskModal({ task }) {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="modal-body px-md-3 px-lg-5">
-              <div className="fs-5 fw-bold my-3">
-                <label className="form-label" htmlFor="title">
+              <div className="my-3">
+                <label className="form-label fs-5 fw-bold" htmlFor="title">
                   Title
                 </label>
                 <input
@@ -98,7 +98,7 @@ function AddTaskModal({ task }) {
                     onClick={(e) => setStartDate(e.target.value)}
                   />
                 </div>
-                <div className="fs-5 fw-bold col">
+                <div className="col">
                   <label className="form-label fs-5 fw-bold" htmlFor="end-date">
                     End date
                   </label>

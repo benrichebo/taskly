@@ -23,10 +23,10 @@ function SignUp({ setPage }) {
     <>
       <form onSubmit={handleSubmit}>
         <div className="modal-body px-md-3 px-lg-5">
-          <h4 className="text-start mb-4">Log in to your account</h4>
+          <h5 className="text-start mb-4">Log in to your account</h5>
 
           <div className="my-3">
-            <label className="form-label fs-5">Username</label>
+            <label className="form-label fs-6">Username</label>
             <input
               className="bg-light shadow-none form-control form-control-lg"
               type="text"
@@ -38,19 +38,19 @@ function SignUp({ setPage }) {
             />
           </div>
           <div className="my-3">
-            <label className="form-label fs-5">Email</label>
+            <label className="form-label fs-6">Email</label>
             <Email setEmail={setEmail} />
           </div>
           <div className="my-3">
-            <label className="form-label fs-5">Password</label>
+            <label className="form-label fs-6">Password</label>
             <Password setPassword={setPassword} />
           </div>
-          <div className="d-flex justify-content-between my-4">
+          <div className="d-flex justify-content-center my-4">
             <a
               type="button"
               className="fs-6 fw-normal text-decoration-none text-dark"
               onClick={() => setPage("login")}>
-              Login
+              Already have an account? Login
             </a>
           </div>
         </div>
@@ -62,7 +62,10 @@ function SignUp({ setPage }) {
             data-bs-dismiss="modal">
             Cancel
           </button>
-          <button className="btn btn-primary btn-lg px-4 rounded" type="button">
+          <button
+            className="btn btn-primary btn-lg px-4 rounded"
+            type="button"
+            disabled={loading}>
             {loading ? (
               <Spinner className="ms-2" />
             ) : (

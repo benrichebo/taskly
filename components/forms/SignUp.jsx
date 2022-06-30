@@ -29,7 +29,7 @@ function SignUp({ setPage }) {
     <>
       <form onSubmit={handleSubmit}>
         <div className="modal-body px-md-3 px-lg-5">
-          <h5 className="text-start mb-4">Log in to your account</h5>
+          <h5 className="text-start mb-4">Enter your details to register</h5>
 
           <div className="my-3">
             <label className="form-label fs-6">Username</label>
@@ -62,23 +62,25 @@ function SignUp({ setPage }) {
         </div>
         {error && <p className="text-danger small px-md-3 px-lg-5">{error}</p>}
         <div className="modal-footer px-md-3 px-lg-5 border-0">
-          <button
-            className="btn btn-light btn-lg px-4 rounded"
-            type="button"
-            data-bs-dismiss="modal"
-            onSubmit={clear}>
-            Cancel
-          </button>
-          <button
-            className="btn btn-primary btn-lg px-4 rounded"
-            type="submit"
-            disabled={loading}>
-            {loading ? (
-              <Spinner className="ms-2" />
-            ) : (
-              <span className="">Sign up</span>
-            )}
-          </button>
+          <div className="w-100 d-flex justify-content-between">
+            <button
+              className="btn btn-light btn-lg px-4 rounded"
+              type="button"
+              data-bs-dismiss="modal"
+              onSubmit={clear}>
+              Cancel
+            </button>
+            <button
+              className="btn btn-primary btn-lg px-4 rounded"
+              type="submit"
+              disabled={loading}>
+              {loading ? (
+                <Spinner className="ms-2" />
+              ) : (
+                <span className="">Sign up</span>
+              )}
+            </button>
+          </div>
         </div>
       </form>
     </>

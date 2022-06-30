@@ -1,51 +1,50 @@
 import { ObjectId } from "mongodb";
 import { deleteOne } from "../db/delete";
+import { findOne } from "../db/find";
 import { findOneAndUpdate } from "../db/update";
-import { deleteItem } from "../functions/delete";
 import { createJwt } from "../jwt";
 import { verifyUser } from "../verification";
 
 export default async (req, res) => {
-  const { userId, role } = await verifyUser(req);
+  const { userId } = await verifyUser(req);
 
-  if (userId && role == "manager")
-    if (req.method == "PUT") {
-      //1. check for method
-      //if method does not exist
-      const body = JSON.parse(req.body);
+  const method = req.method;
 
-      const response = await findOneAndUpdate(
-        "managers",
-        { _id: ObjectId(body?.id) },
-        req.body
-      );
+  if (userId && method == "PUT") {
+    //1. check for method
+    //if method does not exist
+    const body = JSON.parse(req.body);
 
-      if (response?.email) {
-        const { _id, email, role, fullName } = response;
+    const response = await findOneAndUpdate(
+      "users",
+      { _id: ObjectId(body?.id) },
+      req.body
+    );
 
-        const jwt = createJwt({
-          userId: _id,
-          email,
-          role,
-        });
+    if (response?.upsertedCount == 1) {
+      const user = await findOne("users", { _id: ObjectId(userId) });
 
-        const data = {
-          authToken: jwt,
-          id: _id,
-          email: email,
-          fullName: fullName,
-          phone: phone,
-          role,
-        };
+      const { _id, email, name } = user;
 
-        res.status(200).json(data);
-      } else {
-        res.status(404).json({ msg: "Update failed" });
-      }
+      const jwt = createJwt({
+        userId: _id,
+      });
+
+      const data = {
+        authToken: jwt,
+        id: _id,
+        email,
+        name,
+      };
+
+      res.status(200).json(data);
+    } else {
+      res.status(404).json({ msg: "Update failed" });
     }
+  }
 
-  if (method == "DELETE") {
-    const response = await deleteOne("managers", userId);
+  if (userId && method == "DELETE") {
+    const response = await deleteOne("users", { _id: ObjectId(userId) });
 
     if (response.deletedCount === 1) {
       res.status(200).json({ msg: "User was successfully deleted" });

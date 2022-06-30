@@ -41,10 +41,10 @@ export const useUser = (type) => {
       }
     },
 
-    async signUpWithCredentials(credentials, url) {
+    async signUpWithCredentials(credentials) {
       setLoading(true);
       try {
-        const data = await REGISTER(credentials, url);
+        const data = await REGISTER(credentials, "/api/accounts/signup");
         if (data?.id) {
           sessionStorage.setItem("user", data);
           this.getUserInSession();
@@ -59,10 +59,10 @@ export const useUser = (type) => {
       }
     },
 
-    async loginWithEmailAndPassword(credentials, url) {
+    async loginWithEmailAndPassword(credentials) {
       setLoading(true);
       try {
-        const data = await LOGIN(credentials, url);
+        const data = await LOGIN(credentials, "/api/account/login");
         if (data?.id) {
           sessionStorage.setItem("user", data);
           this.getUserInSession();
@@ -81,10 +81,10 @@ export const useUser = (type) => {
       sessionStorage.clearItem("user");
     },
 
-    async updateUser(credentials, url) {
+    async updateUser(credentials) {
       setLoading(true);
       try {
-        const data = await PUT(credentials, url);
+        const data = await PUT(credentials, "/api/account");
         if (data?.id) {
           sessionStorage.setItem("user", data);
           this.getUserInSession();
@@ -99,10 +99,10 @@ export const useUser = (type) => {
       }
     },
 
-    async resetUserPassword(credentials, url) {
+    async resetUserPassword(credentials) {
       setLoading(true);
       try {
-        const data = await PUT(credentials, url);
+        const data = await PUT(credentials, "/api/account/reset-password");
         if (!data?.id) {
           setError(data.msg);
           return;

@@ -1,17 +1,24 @@
+import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { useUser } from "../hooks/useUser";
-import Spinner from "./Spinner";
-import Email from "./ui/Email";
+import { useUser } from "../../hooks/useUser";
+import Spinner from "../ui/Spinner";
+import Email from "../ui/Email";
+import Password from "../ui/Password";
 
-function ForgotPassword({ setPage }) {
+function Login({ setPage }) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const { setLoading, setError, loading, message, user, error } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await user.resetUserPassword({ email }, "/api/v1.1.1/user/account/login");
-    message && router.push("/services");
+    await user.loginWithEmailAndPassword(
+      { email, password },
+      "/api/account/login"
+    );
+    message && router.push("/tasks");
   };
 
   const clear = () => {
@@ -24,18 +31,27 @@ function ForgotPassword({ setPage }) {
     <>
       <form onSubmit={handleSubmit}>
         <div className="modal-body px-md-3 px-lg-5">
-          <h5 className="text-start mb-4">Forgot your password</h5>
-
+          <h5 className="text-start mb-4">Log in to your account</h5>
           <div className="my-3">
             <label className="form-label fs-6">Email</label>
             <Email setEmail={setEmail} />
           </div>
-          <div className="d-flex justify-content-center my-4">
+          <div className="my-3">
+            <label className="form-label fs-6">Password</label>
+            <Password setPassword={setPassword} />
+          </div>
+          <div className="d-flex justify-content-between my-4">
             <a
               type="button"
               className="fs-6 fw-normal text-decoration-none text-dark"
-              onClick={() => setPage("login")}>
-              Already have an account? Login
+              onClick={() => setPage("signUp")}>
+              Create account
+            </a>
+            <a
+              type="button"
+              className="fs-6 fw-normal text-decoration-none text-dark"
+              onClick={() => setPage("forgotPassword")}>
+              Forgot password?
             </a>
           </div>
         </div>
@@ -55,7 +71,7 @@ function ForgotPassword({ setPage }) {
             {loading ? (
               <Spinner className="ms-2" />
             ) : (
-              <span className="">Submit</span>
+              <span className="">Log in</span>
             )}
           </button>
         </div>
@@ -64,4 +80,4 @@ function ForgotPassword({ setPage }) {
   );
 }
 
-export default ForgotPassword;
+export default Login;

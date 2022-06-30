@@ -8,7 +8,7 @@ export const useTasks = (type) => {
   const { sessionStorage } = useStorage("session");
 
   const [tasks, setTasks] = useState(null);
-  const [pinnedTask, setPinnedTask] = useState(null);
+  const [pinnedTasks, setPinnedTasks] = useState(null);
   const [taskData, setTaskData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -75,7 +75,7 @@ export const useTasks = (type) => {
         const data = await PUT(id, "/api/tasks/pinned");
         if (data.msg.includes("successfully")) {
           setMessage(data.msg);
-          this.getPinnedTask();
+          this.getPinnedTasks();
         } else {
           setError(data.msg);
         }
@@ -86,7 +86,7 @@ export const useTasks = (type) => {
       }
     },
 
-    async getPinnedTask() {
+    async getPinnedTasks() {
       setLoading(true);
       try {
         const data = await GET("/api/tasks/pinned");
@@ -111,7 +111,7 @@ export const useTasks = (type) => {
         if (data.msg.includes("successfully")) {
           setMessage(data.msg);
           sessionStorage.setItem("pinned-task", data);
-          this.getPinnedTask();
+          this.getPinnedTasks();
         } else {
           setError(data.msg);
         }
@@ -154,7 +154,6 @@ export const useTasks = (type) => {
       } else {
         setTasks(data);
       }
-      task.getPinnedTask();
     }
 
     if (type == "task") {
@@ -162,20 +161,19 @@ export const useTasks = (type) => {
       if (!data) {
         task.getTask();
       } else {
-        setTasks(data);
+        setTaskData(data);
       }
     }
 
     if (type == "pinned-tasks") {
       const data = sessionStorage.getItem("pinned-tasks");
-      console.log("data", data);
       if (!data) {
-        task.getPinnedTask();
+        task.getPinnedTasks();
       } else {
-        setPinnedTask(data);
+        setPinnedTasks(data);
       }
     }
   }, []);
 
-  return { task, loading, data: tasks, taskData, pinnedTask, error, message };
+  return { task, loading, data: tasks, taskData, pinnedTasks, error, message };
 };

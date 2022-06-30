@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import ForgotPassword from "./ForgotPassword";
-import Login from "./Login";
-import SignUp from "./SignUp";
+import ForgotPassword from ".//forms/ForgotPassword";
+import Login from "./forms/Login";
+import SignUp from ".//forms/SignUp";
 
 function OnboardingModal() {
   const [page, setPage] = useState("login")

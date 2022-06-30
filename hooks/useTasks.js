@@ -57,6 +57,7 @@ export const useTasks = (type) => {
         const data = await POST(credentials, "/api/tasks/add-task");
         if (data.msg.includes("successfully")) {
           setMessage(data.msg);
+          this.getTasks();
         } else {
           setError(data.msg);
         }
@@ -71,30 +72,10 @@ export const useTasks = (type) => {
       setError("");
       setLoading(true);
       try {
-        const data = await PUT(id, "/api/tasks/pin-task");
+        const data = await PUT(id, "/api/tasks/pinned");
         if (data.msg.includes("successfully")) {
           setMessage(data.msg);
-          sessionStorage.setItem("pinned-task", data);
-          this.getPinnedTask;
-        } else {
-          setError(data.msg);
-        }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    },
-
-    async deletePinTask(id) {
-      setError("");
-      setLoading(true);
-      try {
-        const data = await DELETE(id, "/api/tasks/pin-task");
-        if (data.msg.includes("successfully")) {
-          setMessage(data.msg);
-          sessionStorage.setItem("pinned-task", data);
-          this.getPinnedTask;
+          this.getPinnedTask();
         } else {
           setError(data.msg);
         }
@@ -108,12 +89,31 @@ export const useTasks = (type) => {
     async getPinnedTask() {
       setLoading(true);
       try {
-        const data = await GET("/api/tasks/pin-task");
+        const data = await GET("/api/tasks/pinned");
         if (data?.msg) {
           setError(data.msg);
         } else {
-          sessionStorage.setItem("pin-tasks", data);
+          sessionStorage.setItem("pinned-tasks", data);
           setTasks(data);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+
+    async deletePinTask(id) {
+      setError("");
+      setLoading(true);
+      try {
+        const data = await DELETE(id, "/api/tasks/pinned");
+        if (data.msg.includes("successfully")) {
+          setMessage(data.msg);
+          sessionStorage.setItem("pinned-task", data);
+          this.getPinnedTask();
+        } else {
+          setError(data.msg);
         }
       } catch (error) {
         setError(error.message);

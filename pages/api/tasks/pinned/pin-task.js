@@ -1,8 +1,8 @@
-import { authenticate } from "../authentication";
+import { authenticate } from "../../authentication";
 import moment from "moment";
-import { verifyUser } from "../verification";
+import { verifyUser } from "../../verification";
 import { ObjectId } from "mongodb";
-import { insertToArray } from "../db/update";
+import { insertToArray } from "../../db/update";
 
 export default authenticate(async (req, res) => {
   //verify user

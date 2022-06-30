@@ -22,7 +22,7 @@ function SignUp({ setPage }) {
   const clear = () => {
     setLoading(false);
     setError("");
-    setPage("")
+    setPage("");
   };
 
   return (
@@ -60,8 +60,8 @@ function SignUp({ setPage }) {
             </a>
           </div>
         </div>
+        {error && <p className="text-danger small px-md-3 px-lg-5">{error}</p>}
         <div className="modal-footer px-md-3 px-lg-5 border-0">
-          {error && <p className="text-danger small">{error}</p>}
           <button
             className="btn btn-light btn-lg px-4 rounded"
             type="button"
@@ -71,7 +71,7 @@ function SignUp({ setPage }) {
           </button>
           <button
             className="btn btn-primary btn-lg px-4 rounded"
-            type="button"
+            type="submit"
             disabled={loading}>
             {loading ? (
               <Spinner className="ms-2" />

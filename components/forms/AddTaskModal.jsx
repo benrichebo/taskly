@@ -112,9 +112,13 @@ function AddTaskModal({ taskData }) {
                 </div>
               </div>
             </div>
+            {message && (
+              <p className="text-success small px-md-3 px-lg-5">{message}</p>
+            )}
+            {error && (
+              <p className="text-danger small px-md-3 px-lg-5">{error}</p>
+            )}
             <div className="modal-footer px-md-3 px-lg-5 border-0">
-              {error && <p className="text-danger small">{error}</p>}
-              {message && <p className="text-success small">{message}</p>}
               <div
                 className={`w-100  ${
                   taskData && "d-flex justify-content-between"

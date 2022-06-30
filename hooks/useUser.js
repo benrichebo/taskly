@@ -16,15 +16,20 @@ export const useUser = (type) => {
   let user = {
     async getCurrentUser(url) {
       setLoading(true);
-      const data = await GET(url);
-      if (data.msg) {
-        setError(data.msg);
-      } else {
-        sessionStorage.setItem("user", data);
-        setUserData(data);
-        setMessage("success");
+      try {
+        const data = await GET(url);
+        if (data.msg) {
+          setError(data.msg);
+        } else {
+          sessionStorage.setItem("user", data);
+          setUserData(data);
+          setMessage("success");
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
     getUserInSession() {
@@ -38,28 +43,38 @@ export const useUser = (type) => {
 
     async signUpWithCredentials(credentials, url) {
       setLoading(true);
-      const data = await REGISTER(credentials, url);
-      if (data?.id) {
-        sessionStorage.setItem("user", data);
-        this.getUserInSession();
-        setMessage("success");
-      } else {
-        setError(data.msg);
+      try {
+        const data = await REGISTER(credentials, url);
+        if (data?.id) {
+          sessionStorage.setItem("user", data);
+          this.getUserInSession();
+          setMessage("success");
+        } else {
+          setError(data.msg);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
     async loginWithEmailAndPassword(credentials, url) {
       setLoading(true);
-      const data = await LOGIN(credentials, url);
-      if (data?.id) {
-        sessionStorage.setItem("user", data);
-        this.getUserInSession();
-        setMessage("success");
-      } else {
-        setError(data.msg);
+      try {
+        const data = await LOGIN(credentials, url);
+        if (data?.id) {
+          sessionStorage.setItem("user", data);
+          this.getUserInSession();
+          setMessage("success");
+        } else {
+          setError(data.msg);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
     signOut() {
@@ -68,27 +83,37 @@ export const useUser = (type) => {
 
     async updateUser(credentials, url) {
       setLoading(true);
-      const data = await PUT(credentials, url);
-      if (data?.id) {
-        sessionStorage.setItem("user", data);
-        this.getUserInSession();
-        setMessage("success");
-      } else {
-        setError(data.msg);
+      try {
+        const data = await PUT(credentials, url);
+        if (data?.id) {
+          sessionStorage.setItem("user", data);
+          this.getUserInSession();
+          setMessage("success");
+        } else {
+          setError(data.msg);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
     async resetUserPassword(credentials, url) {
       setLoading(true);
-      const data = await PUT(credentials, url);
-      if (!data?.id) {
-        setError(data.msg);
-        return;
-      } else {
-        setMessage("success");
+      try {
+        const data = await PUT(credentials, url);
+        if (!data?.id) {
+          setError(data.msg);
+          return;
+        } else {
+          setMessage("success");
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
   };
 

@@ -78,9 +78,13 @@ function AddAttendeeModal({ attendee }) {
                 />
               </div>
             </div>
+            {message && (
+              <p className="text-success small px-md-3 px-lg-5">{message}</p>
+            )}
+            {error && (
+              <p className="text-danger small px-md-3 px-lg-5">{error}</p>
+            )}
             <div className="modal-footer px-md-3 px-lg-5 border-0">
-              {error && <p className="text-danger small">{error}</p>}
-              {message && <p className="text-success small">{message}</p>}
               <div className="d-flex justify-content-end">
                 <button
                   className="btn btn-light btn-lg px-4 rounded"

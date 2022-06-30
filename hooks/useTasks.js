@@ -22,7 +22,6 @@ export const useTasks = (type) => {
         console.log("data", data);
         if (data?.msg) {
           setError(data.msg);
-          console.log("error", data.msg);
         } else {
           sessionStorage.setItem("tasks", data);
           setTasks(data);
@@ -36,63 +35,90 @@ export const useTasks = (type) => {
 
     async getTask(id) {
       setLoading(true);
-      const data = await GET(`/api/task/${id}`);
-      if (data.msg) {
-        setError(data.msg);
-      } else {
-        sessionStorage.setItem("task", data);
-        setTaskData(data);
+      try {
+        const data = await GET(`/api/task/${id}`);
+        if (data.msg) {
+          setError(data.msg);
+        } else {
+          sessionStorage.setItem("task", data);
+          setTaskData(data);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
     async addTask(credentials) {
       setError("");
       setLoading(true);
-
-      const data = await POST(credentials, "/api/tasks/add-task");
-      if (data.msg.includes("successfully")) {
-        setMessage(data.msg);
-      } else {
-        setError(data.msg);
+      try {
+        const data = await POST(credentials, "/api/tasks/add-task");
+        if (data.msg.includes("successfully")) {
+          setMessage(data.msg);
+        } else {
+          setError(data.msg);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
     async pinTask(id) {
       setError("");
       setLoading(true);
-
-      const data = await PUT(id, "/api/tasks/pin-task");
-      if (data.msg.includes("successfully")) {
-        setMessage(data.msg);
-        sessionStorage.setItem("pinned-task", data);
-        this.getPinnedTask;
-      } else {
-        setError(data.msg);
+      try {
+        const data = await PUT(id, "/api/tasks/pin-task");
+        if (data.msg.includes("successfully")) {
+          setMessage(data.msg);
+          sessionStorage.setItem("pinned-task", data);
+          this.getPinnedTask;
+        } else {
+          setError(data.msg);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
     async deletePinTask(id) {
       setError("");
       setLoading(true);
-
-      const data = await DELETE(id, "/api/tasks/pin-task");
-      if (data.msg.includes("successfully")) {
-        setMessage(data.msg);
-        sessionStorage.setItem("pinned-task", data);
-        this.getPinnedTask;
-      } else {
-        setError(data.msg);
+      try {
+        const data = await DELETE(id, "/api/tasks/pin-task");
+        if (data.msg.includes("successfully")) {
+          setMessage(data.msg);
+          sessionStorage.setItem("pinned-task", data);
+          this.getPinnedTask;
+        } else {
+          setError(data.msg);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
-    getPinnedTask() {
-      const data = sessionStorage.getItem("pinned-task");
-      if (data) {
-        setPinnedTask(data);
+    async getPinnedTask() {
+      setLoading(true);
+      try {
+        const data = await GET("/api/tasks/pin-task");
+        if (data?.msg) {
+          setError(data.msg);
+        } else {
+          sessionStorage.setItem("pin-tasks", data);
+          setTasks(data);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     },
 
@@ -137,6 +163,16 @@ export const useTasks = (type) => {
         task.getTask();
       } else {
         setTasks(data);
+      }
+    }
+
+    if (type == "pinned-tasks") {
+      const data = sessionStorage.getItem("pinned-tasks");
+      console.log("data", data);
+      if (!data) {
+        task.getPinnedTask();
+      } else {
+        setPinnedTask(data);
       }
     }
   }, []);

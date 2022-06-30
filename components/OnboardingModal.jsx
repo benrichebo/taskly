@@ -6,7 +6,7 @@ import SignUp from "./SignUp";
 function OnboardingModal() {
   const [page, setPage] = useState("login")
   return (
-    <div className="modal fade" role="dialog" tabindex="-1" id="onboarding">
+    <div className="modal fade" role="dialog" tabIndex="-1" id="onboarding">
       <div
         className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down"
         role="document">

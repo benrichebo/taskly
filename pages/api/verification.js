@@ -1,5 +1,5 @@
 import { verify } from "jsonwebtoken";
-import { secret_key } from "../../../lib/secret";
+import { secret_key } from "../../lib/secret";
 
 export const verifyUser = async (req) => {
   const authorization = req?.headers?.authorization;

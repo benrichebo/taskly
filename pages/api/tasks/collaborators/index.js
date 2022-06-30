@@ -1,20 +1,20 @@
-import { findOne } from "../db/find";
+import { authenticate } from "../authentication";
+import { find, findOne } from "../db/find";
 import { verifyUser } from "../verification";
 
-export default async (req, res) => {
-  const { userId } = await verifyUser(req);
-
-  const { taskId } = JSON.parse(req.body);
+export default authenticate(async (req, res) => {
+  const { userId, role } = await verifyUser(req);
 
   if (userId) {
     if (req.method == "GET") {
-      const collaborators = await findOne("tasks", {
-        _id: ObjectId(userId),
-        "collaborators.id": taskId,
-      });
+      const collaborators = await findOne(
+        "collaborators",
+        { _id: ObjectId(userId) },
+        { projection: { collaborators: 1 } }
+      );
 
-      if (collaborators._id) {
-        res.status(200).json(tasks);
+      if (collaborators?._id) {
+        res.status(200).json(collaborators);
       } else {
         res.status(400).json({ msg: "There are no collaborators" });
       }
@@ -22,4 +22,4 @@ export default async (req, res) => {
   } else {
     res.status(400).json({ msg: "Invalid method" });
   }
-};
+});

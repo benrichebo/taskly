@@ -7,7 +7,7 @@ function Password({ setPassword }) {
       type="password"
       name="password"
       placeholder="Enter password"
-      autocomplete="on"
+      autoComplete="on"
       required=""
       onChange={(e) => setPassword(e.target.value)}
     />

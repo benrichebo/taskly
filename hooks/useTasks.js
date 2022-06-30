@@ -15,21 +15,28 @@ export const useTasks = (type) => {
   const [message, setMessage] = useState(null);
 
   const task = {
-    async getTasks(url) {
+    async getTasks() {
       setLoading(true);
-      const data = await GET({}, url);
-      if (data.msg) {
-        setError(data.msg);
-      } else {
-        sessionStorage.setItem("tasks", data);
-        setTasks(data);
+      try {
+        const data = await GET("/api/tasks");
+        console.log("data", data);
+        if (data?.msg) {
+          setError(data.msg);
+          console.log("error", data.msg);
+        } else {
+          sessionStorage.setItem("tasks", data);
+          setTasks(data);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
-    async getTask(url) {
+    async getTask(id) {
       setLoading(true);
-      const data = await GET({}, url);
+      const data = await GET(`/api/task/${id}`);
       if (data.msg) {
         setError(data.msg);
       } else {
@@ -39,11 +46,11 @@ export const useTasks = (type) => {
       setLoading(false);
     },
 
-    async addTask(credentials, url) {
+    async addTask(credentials) {
       setError("");
       setLoading(true);
 
-      const data = await POST(credentials, url);
+      const data = await POST(credentials, "/api/tasks/add-task");
       if (data.msg.includes("successfully")) {
         setMessage(data.msg);
       } else {
@@ -115,8 +122,9 @@ export const useTasks = (type) => {
   useEffect(() => {
     if (type == "tasks") {
       const data = sessionStorage.getItem("tasks");
+      console.log("data", data);
       if (!data) {
-        tasks.getTasks();
+        task.getTasks();
       } else {
         setTasks(data);
       }
@@ -126,7 +134,7 @@ export const useTasks = (type) => {
     if (type == "task") {
       const data = sessionStorage.getItem("task");
       if (!data) {
-        tasks.getTasks();
+        task.getTask();
       } else {
         setTasks(data);
       }

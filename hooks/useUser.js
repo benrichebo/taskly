@@ -103,5 +103,5 @@ export const useUser = (type) => {
     }
   }, [userData]);
 
-  return { user, userData, message, loading, error };
+  return { user, userData, message, loading, error, setLoading, setError };
 };

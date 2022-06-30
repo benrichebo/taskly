@@ -32,7 +32,7 @@ function AddAttendeeModal({ attendee }) {
   };
 
   return (
-    <div className="modal fade" role="dialog" tabindex="-1" id="addTask">
+    <div className="modal fade" role="dialog" tabIndex="-1" id="addTask">
       <div
         className="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down"
         role="document">
@@ -56,10 +56,10 @@ function AddAttendeeModal({ attendee }) {
                   type="text"
                   id="name"
                   placeholder="Add user name"
-                  autocomplete="on"
+                  autoComplete="on"
                   required=""
                   value={name}
-                  onClick={(e) => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="my-3">
@@ -71,10 +71,10 @@ function AddAttendeeModal({ attendee }) {
                   type="email"
                   id="email"
                   placeholder="Add user email"
-                  autocomplete="on"
+                  autoComplete="on"
                   required=""
                   value={email}
-                  onClick={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>

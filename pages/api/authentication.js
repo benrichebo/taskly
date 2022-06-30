@@ -10,6 +10,6 @@ export const authenticate = (fn) => async (req, res) => {
     }
     res
       .status(401)
-      .json({ status: 401, statusText: "Sorry you are not authenticated" });
+      .json({ msg: "Sorry you are not authenticated" });
   });
 };

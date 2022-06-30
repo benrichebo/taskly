@@ -6,12 +6,18 @@ import Email from "./ui/Email";
 function ForgotPassword({ setPage }) {
   const [email, setEmail] = useState("");
 
-  const { loading, message, user, error } = useUser();
+  const { setLoading, setError, loading, message, user, error } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await user.resetUserPassword({ email }, "/api/v1.1.1/user/account/login");
     message && router.push("/services");
+  };
+
+  const clear = () => {
+    setLoading(false);
+    setError("");
+    setPage("");
   };
 
   return (
@@ -38,7 +44,8 @@ function ForgotPassword({ setPage }) {
           <button
             className="btn btn-light btn-lg px-4 rounded"
             type="button"
-            data-bs-dismiss="modal">
+            data-bs-dismiss="modal"
+            onSubmit={clear}>
             Cancel
           </button>
           <button

@@ -11,18 +11,18 @@ export default async (req, res) => {
   if (req.method == "GET") {
     const collaborator = await findOne("tasks", {
       _id: ObjectId(userId),
-      "collaborators.userId": id,
+      "collaborators.id": id,
     });
 
     if (collaborator?.id) {
       res.status(200).json(collaborator);
     } else {
-      res.status(400).json({ msg: "There is no collaborator for this task" });
+      res.status(400).json({ msg: "There is no collaborator" });
     }
   }
 
   if (req.method == "PUT") {
-    const { name, email } = JSON.parse(req.body);
+    const { email, name } = JSON.parse(req.body);
     const data = {
       $set: {
         "collaborators.$[elem].name": name,
@@ -40,17 +40,15 @@ export default async (req, res) => {
       }
     );
 
-    console.log("results", results);
-
     if (results.matchedCount === 1) {
-      res.status(200).json({ msg: "Order updated successfully" });
+      res.status(200).json({ msg: "Collaborator updated successfully" });
     } else {
       statusCode404(res);
     }
   }
 
   if (method == "DELETE") {
-    const set = { $pull: { collaborators: { userId: id } } };
+    const set = { $pull: { collaborators: { id: id } } };
 
     //delete account
     const response = await removeFromArray(
@@ -61,9 +59,9 @@ export default async (req, res) => {
       set
     );
     if (response.matchedCount === 1) {
-      res.status(200).json({ msg: "Task was successfully deleted" });
+      res.status(200).json({ msg: "Collaborator was successfully deleted" });
     } else {
-      res.status(400).json({ msg: "Task was not deleted" });
+      res.status(400).json({ msg: "Collaborator was not deleted" });
     }
   }
 };

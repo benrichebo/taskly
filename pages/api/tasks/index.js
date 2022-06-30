@@ -1,7 +1,8 @@
+import { authenticate } from "../authentication";
 import { find, findOne } from "../db/find";
 import { verifyUser } from "../verification";
 
-export default async (req, res) => {
+export default authenticate(async (req, res) => {
   const { userId, role } = await verifyUser(req);
 
   if (userId) {
@@ -21,4 +22,4 @@ export default async (req, res) => {
   } else {
     res.status(400).json({ msg: "Invalid method" });
   }
-};
+});

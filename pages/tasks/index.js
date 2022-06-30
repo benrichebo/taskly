@@ -1,31 +1,35 @@
-import React from "react";
-import AddTaskModal from "../components/AddTaskModal";
+import React, { useEffect, useState } from "react";
+import AddTaskModal from "../../components/AddTaskModal";
 import { MdAdd, MdEast } from "react-icons/md";
-import Layout from "../components/Layout";
-import { useUser } from "../hooks/useUser";
+import Layout from "../../components/Layout";
+import { useUser } from "../../hooks/useUser";
 import { useRouter } from "next/router";
-import { useTasks } from "../hooks/useTasks";
-import Spinner from "../components/Spinner";
-import PinnedTask from "../components/PinnedTask";
-import TodaysTask from "../components/TodaysTask";
-import RegularTask from "../components/RegularTask";
-import TimeCard from "../components/TimeCard";
-import User from "../components/User";
-import AddAttendeeModal from "../components/AddAttendeeModal";
+import { useTasks } from "../../hooks/useTasks";
+import Spinner from "../../components/Spinner";
+import PinnedTask from "../../components/PinnedTask";
+import TodaysTask from "../../components/TodaysTask";
+import RegularTask from "../../components/RegularTask";
+import TimeCard from "../../components/TimeCard";
+import User from "../../components/User";
+import AddAttendeeModal from "../../components/AddAttendeeModal";
 
 function Tasks() {
   const { userData } = useUser("user");
 
-  //fetch tasks
-  const { data, loading, error, task, pinnedTask } = useTasks("tasks");
+  const [taskData, setTaskData] = useState();
 
   const router = useRouter();
 
-  if (!userData.id) {
-    router.push("/");
-  }
+  //fetch tasks
+  const { data, loading, error, task, pinnedTask } = useTasks("tasks");
 
-  const todaysTask = data; //filter and check todays date
+  useEffect(() => {
+    if (!userData?.id) {
+      //router.push("/");
+    }
+  }, []);
+
+  const todaysTasks = data; //filter and check todays date
 
   return (
     <>
@@ -124,21 +128,27 @@ function Tasks() {
               )}
               {error && (
                 <div className="d-flex justify-content-center align-items-center">
-                  <h4>There was an error loading tasks</h4>
-                  <button
-                    className="btn btn-primary my-3"
-                    onClick={task?.getTasks("/api/tasks")}>
-                    Fetch tasks
-                  </button>
+                  <div className="text-center">
+                    <h6 className="text-muted">
+                      There was an error loading tasks
+                    </h6>
+                    <button
+                      className="btn btn-primary my-3"
+                      onClick={() => task.getTasks()}>
+                      Fetch tasks
+                    </button>
+                  </div>
                 </div>
               )}
-              {todaysTask &&
-                todaysTask?.map((task) => (
-                  <TodaysTask key={task?.id} task={task} />
-                ))}
+              {/*    {todaysTasks && todaysTasks?.length > 0
+                ? todaysTasks?.map((task) => (
+                    <TodaysTask key={task?.id} task={task} />
+                  ))
+                : "There are no tasks available for today"} */}
 
-              {data &&
-                data?.map((task) => <RegularTask key={task?.id} task={task} />)}
+              {data?.map((task) => (
+                <RegularTask key={task?.id} task={task} />
+              ))}
 
               <header></header>
             </div>
@@ -168,8 +178,8 @@ function Tasks() {
             </div>
           </div>
         </div>
-        <AddTaskModal />
-        <AddAttendeeModal task={task} />
+        <AddTaskModal taskData={taskData} />
+        <AddAttendeeModal />
       </Layout>
     </>
   );

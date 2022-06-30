@@ -1,5 +1,5 @@
 import { sign } from "jsonwebtoken";
-import { secret_key } from "../../../lib/secret";
+import { secret_key } from "../../lib/secret";
 
 export const createJwt = (payload) => {
   const claims = {

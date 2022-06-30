@@ -1,27 +1,36 @@
-import { ObjectId } from "mongodb";
-import { findOne } from "../db/find";
-import { insertToArray, removeFromArray } from "../db/update";
+import { authenticate } from "../authentication";
+import moment from "moment";
 import { verifyUser } from "../verification";
+import { ObjectId } from "mongodb";
+import { insertToArray } from "../db/update";
 
-export default async (req, res) => {
+export default authenticate(async (req, res) => {
+  //verify user
   const { userId } = await verifyUser(req);
-
-  const { id } = req.query;
 
   const collection = "tasks";
 
-  if (req.method == "POST") {
+  const method = req.method;
+
+  const body = JSON.parse(req.body);
+
+  try {
+    //2. check for method
+    //if method does not exist
+    if (method !== "POST") {
+      res.status(400).json({ msg: "Invalid method" });
+      return;
+    }
+
     const date = new Date();
 
     const collaborator = {
-      id,
-      userId: req.body.id,
-      ...req.body,
+      ...body,
       createdAt: moment(date).format("lll"),
     };
 
     const data = {
-      $push: { collaborators: { ...collaborator } },
+      $push: { collaborators: collaborator },
     };
 
     //5. insert data into company collection
@@ -37,5 +46,9 @@ export default async (req, res) => {
     } else {
       res.status(401).json({ msg: "Adding collaborator failed" });
     }
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  } finally {
+    res.end();
   }
-};
+});

@@ -4,19 +4,24 @@
  * 3. Parameters: url, data
  **/
 
-export const GET = async (data, url) => {
+export const GET = async (url) => {
+  const sessionData = sessionStorage.getItem("user");
+  const token = JSON.parse(sessionData);
+  const authToken = token?.authToken;
+
   const config = {
     method: "GET",
     headers: {
       ContentType: "application/json",
+      Authorization: `Bearer ${sessionData && authToken}`,
     },
-    body: JSON.stringify(data),
     timeout: 5000,
   };
 
   //2. return response and error
   try {
     const resp = await fetch(url, config);
+    console.log("resp", await resp.json());
     return resp.json();
   } catch (error) {
     return error.message;

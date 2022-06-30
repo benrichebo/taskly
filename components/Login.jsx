@@ -6,11 +6,11 @@ import Email from "./ui/Email";
 import Password from "./ui/Password";
 
 function Login({ setPage }) {
-  const router =  useRouter()
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loading, message, user, error } = useUser();
+  const { setLoading, setError, loading, message, user, error } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,6 +19,12 @@ function Login({ setPage }) {
       "/api/account/login"
     );
     message && router.push("/tasks");
+  };
+
+  const clear = () => {
+    setLoading(false);
+    setError("");
+    setPage("");
   };
 
   return (
@@ -54,7 +60,8 @@ function Login({ setPage }) {
           <button
             className="btn btn-light btn-lg px-4 rounded"
             type="button"
-            data-bs-dismiss="modal">
+            data-bs-dismiss="modal"
+            onSubmit={clear}>
             Cancel
           </button>
           <button

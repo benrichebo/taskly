@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { useTasks } from "../hooks/useTasks";
 import Spinner from "./Spinner";
 
-function AddTaskModal({ task }) {
-  const [title, setTitle] = useState(task?.title || "");
-  const [description, setDescription] = useState(task?.description || "");
-  const [startDate, setStartDate] = useState(task?.startDate || "");
-  const [endDate, setEndDate] = useState(task?.endDate || "");
+function AddTaskModal({ taskData }) {
+  const [title, setTitle] = useState(taskData?.title || "");
+  const [description, setDescription] = useState(taskData?.description || "");
+  const [startDate, setStartDate] = useState(taskData?.startDate || "");
+  const [endDate, setEndDate] = useState(taskData?.endDate || "");
   const id = Math.random().toString(36).substring(2, 12);
 
   const { loading, message, task, error } = useTasks();
@@ -14,8 +14,8 @@ function AddTaskModal({ task }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     //if editing task
-    if (task) {
-      const { id, title, description, startDate, endDate } = task;
+    if (taskData) {
+      const { id, title, description, startDate, endDate } = taskData;
       await task.updateTask(
         { id, title, description, startDate, endDate },
         `/api/tasks/${id}`
@@ -36,7 +36,7 @@ function AddTaskModal({ task }) {
   };
 
   return (
-    <div className="modal fade" role="dialog" tabindex="-1" id="addTask">
+    <div className="modal fade" role="dialog" tabIndex="-1" id="addTask">
       <div
         className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-fullscreen-md-down"
         role="document">
@@ -60,10 +60,10 @@ function AddTaskModal({ task }) {
                   type="text"
                   id="title"
                   placeholder="Add task title"
-                  autocomplete="on"
+                  autoComplete="on"
                   required=""
                   value={title}
-                  onClick={(e) => setTitle(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
               <div className="my-4">
@@ -74,14 +74,14 @@ function AddTaskModal({ task }) {
                 </label>
                 <textarea
                   className="bg-light border-light shadow-none form-control"
-                  spellcheck="true"
-                  autocomplete="on"
+                  spellCheck="true"
+                  autoComplete="on"
                   required=""
-                  maxlength="100"
+                  maxLength="100"
                   rows="4"
                   id="description"
                   value={description}
-                  onClick={(e) => setDescription(e.target.value)}></textarea>
+                  onChange={(e) => setDescription(e.target.value)}></textarea>
               </div>
               <div className="my-4 row">
                 <div className="col">
@@ -95,7 +95,7 @@ function AddTaskModal({ task }) {
                     type="datetime-local"
                     id="start-date"
                     value={startDate}
-                    onClick={(e) => setStartDate(e.target.value)}
+                    onChange={(e) => setStartDate(e.target.value)}
                   />
                 </div>
                 <div className="col">
@@ -107,7 +107,7 @@ function AddTaskModal({ task }) {
                     type="datetime-local"
                     id="end-date"
                     value={endDate}
-                    onClick={(e) => setEndDate(e.target.value)}
+                    onChange={(e) => setEndDate(e.target.value)}
                   />
                 </div>
               </div>
@@ -115,8 +115,11 @@ function AddTaskModal({ task }) {
             <div className="modal-footer px-md-3 px-lg-5 border-0">
               {error && <p className="text-danger small">{error}</p>}
               {message && <p className="text-success small">{message}</p>}
-              <div className="d-flex justify-content-between">
-                <div className="d-flex justify-content-between">
+              <div
+                className={`w-100  ${
+                  taskData && "d-flex justify-content-between"
+                }`}>
+                {taskData && (
                   <button
                     className="btn btn-danger btn-lg px-4 rounded"
                     type="button">
@@ -126,22 +129,24 @@ function AddTaskModal({ task }) {
                       <span className="">Delete task</span>
                     )}
                   </button>
+                )}
+                <div className="d-flex justify-content-end">
+                  <button
+                    className="btn btn-light btn-lg px-4 rounded me-2"
+                    type="button"
+                    data-bs-dismiss="modal">
+                    Cancel
+                  </button>
+                  <button
+                    className="btn btn-primary btn-lg px-4 rounded"
+                    type="button">
+                    {loading ? (
+                      <Spinner className="ms-2" />
+                    ) : (
+                      <span className="">Save task</span>
+                    )}
+                  </button>
                 </div>
-                <button
-                  className="btn btn-light btn-lg px-4 rounded"
-                  type="button"
-                  data-bs-dismiss="modal">
-                  Cancel
-                </button>
-                <button
-                  className="btn btn-primary btn-lg px-4 rounded"
-                  type="button">
-                  {loading ? (
-                    <Spinner className="ms-2" />
-                  ) : (
-                    <span className="">Save task</span>
-                  )}
-                </button>
               </div>
             </div>
           </form>

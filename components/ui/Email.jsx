@@ -7,7 +7,7 @@ function Email({setEmail}) {
       type="text"
       name="title"
       placeholder="Enter email"
-      autocomplete="on"
+      autoComplete="on"
       required=""
       onChange={(e) => setEmail(e.target.value)}
     />

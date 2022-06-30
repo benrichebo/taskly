@@ -1,11 +1,12 @@
 import React from "react";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdRefresh } from "react-icons/md";
 import { useTasks } from "../hooks/useTasks";
 import PinnedTasks from "./tasks/PinnedTasks";
+import Spinner from "./ui/Spinner";
 
-function WeeklyAside({ setAllTasks, setTaskData}) {
+function WeeklyAside({ setAllTasks, setTaskData }) {
   //fetch tasks
-  const { pinnedTasks } = useTasks("pinned-tasks");
+  const { pinnedTasks, error, task, loading } = useTasks("pinned-tasks");
   return (
     <>
       <aside className="p-xxl-3">
@@ -20,15 +21,37 @@ function WeeklyAside({ setAllTasks, setTaskData}) {
         <div className="mt-4">
           <div className="d-flex justify-content-between align-items-center pt-md-5">
             <h4 className="mb-0">Weekly pinned</h4>
-            <a
-              className="link-warning text-decoration-none"
-              href="#"
-              onClick={() => setAllTasks(pinnedTasks)}>
-              View all
-            </a>
+            {!error && (
+              <a
+                className="link-warning text-decoration-none"
+                href="#"
+                onClick={() => setAllTasks(pinnedTasks)}>
+                View all
+              </a>
+            )}
+            {error && (
+              <a
+                className="link-warning text-decoration-none"
+                href="#"
+                onClick={() => task.getPinnedTasks()}>
+                <MdRefresh size={28} />
+              </a>
+            )}
           </div>
         </div>
-        {pinnedTasks && <PinnedTasks pinnedTasks={pinnedTasks} />}
+        {loading && (
+          <div className="d-flex justify-content-center align-items-center py-4">
+            <Spinner />
+          </div>
+        )}
+
+        {pinnedTasks ? (
+          <PinnedTasks pinnedTasks={pinnedTasks} />
+        ) : (
+          <div className="my-3 text-muted">
+            <p>There are no pinned tasks</p>
+          </div>
+        )}
 
         <div className="my-4"></div>
       </aside>

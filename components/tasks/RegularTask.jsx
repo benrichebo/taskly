@@ -1,8 +1,8 @@
 import React from 'react'
 import { HiMinus } from 'react-icons/hi';
 import { MdAccessAlarm } from 'react-icons/md';
-import Actions from './Actions';
-import Attendees from './Attendees';
+import Actions from '../Actions';
+import Attendees from '../Attendees';
 
 function RegularTask({ task, setTaskData }) {
   return (

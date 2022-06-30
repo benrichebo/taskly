@@ -1,7 +1,7 @@
 import React from 'react'
 import { MdAccessAlarm, MdCheck } from 'react-icons/md';
-import Actions from './Actions';
-import Attendees from './Attendees';
+import Actions from '../Actions';
+import Attendees from '../Attendees';
 
 function TodaysTask({ task, setTaskData }) {
   return (

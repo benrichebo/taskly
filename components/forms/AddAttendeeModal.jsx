@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useTasks } from "../hooks/useTasks";
-import Spinner from "./Spinner";
+import { useTasks } from "../../hooks/useTasks";
+import Spinner from "../ui/Spinner";
 
 function AddAttendeeModal({ attendee }) {
   const [name, setName] = useState(attendee?.description || "");

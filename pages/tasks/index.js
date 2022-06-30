@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import AddTaskModal from "../../components/AddTaskModal";
+import AddTaskModal from "../../components/forms/AddTaskModal";
 import { MdAdd, MdEast } from "react-icons/md";
 import Layout from "../../components/Layout";
-import { useTasks } from "../../hooks/useTasks";
-import Spinner from "../../components/ui/Spinner";
-import PinnedTasks from "../../components/tasks/PinnedTasks";
-import TodaysTask from "../../components/TodaysTask";
-import RegularTask from "../../components/RegularTask";
-import AddAttendeeModal from "../../components/AddAttendeeModal";
+import AddAttendeeModal from "../../components/forms/AddAttendeeModal";
 import UserAside from "../../components/UserAside";
 import Main from "../../components/tasks/Main";
+import WeeklyAside from "../../components/WeeklyAside";
+import moment from "moment";
 
 function Tasks() {
   const [taskData, setTaskData] = useState();
+  let day = moment().format("dddd ll");
 
   return (
     <>
@@ -20,10 +18,7 @@ function Tasks() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xxl-4 bg-light px-md-3 px-lg-4 px-xxl-5 vh-100 order-last order-sm-first sticky-sidebar overflow-auto">
-              <WeeklyAside
-                setAllTasks={setAllTasks}
-                setTaskData={setTaskData}
-              />
+              <WeeklyAside setTaskData={setTaskData} />
             </div>
             <div className="col-12 col-sm-6 col-md-7 col-lg-5 col-xxl-5 px-md-3 px-lg-5 pb-5">
               <header className="mt-4 d-sm-none">
@@ -35,7 +30,7 @@ function Tasks() {
               <div className="d-flex justify-content-between">
                 <div className="my-4">
                   <h2>Todays schedule</h2>
-                  <h2 className="text-primary">Thursday 11</h2>
+                  <h2 className="text-primary">{day}</h2>
                 </div>
                 <div className="my-4">
                   <a

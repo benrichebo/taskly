@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTasks } from "../../hooks/useTasks";
+import Spinner from "../ui/Spinner";
 import RegularTask from "./RegularTask";
 import TodaysTask from "./TodaysTask";
 

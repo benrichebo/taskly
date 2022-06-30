@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useTasks } from "../hooks/useTasks";
-import Spinner from "./Spinner";
+import { useTasks } from "../../hooks/useTasks";
+import Spinner from "../ui/Spinner";
 
 function AddTaskModal({ taskData }) {
   const [title, setTitle] = useState(taskData?.title || "");

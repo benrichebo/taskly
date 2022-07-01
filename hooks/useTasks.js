@@ -124,13 +124,18 @@ export const useTasks = (type) => {
 
     async updateTask(credentials) {
       setLoading(true);
-      const data = await PUT(credentials, `/api/tasks/${credentials?.id}`);
-      if (data.msg.includes("successfully")) {
-        setMessage(data.msg);
-      } else {
-        setError(data.msg);
+      try {
+        const data = await PUT(credentials, `/api/tasks/${credentials?.id}`);
+        if (data.msg.includes("successfully")) {
+          setMessage(data.msg);
+        } else {
+          setError(data.msg);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
 
     async deleteTask(id) {
@@ -143,6 +148,12 @@ export const useTasks = (type) => {
       }
       setLoading(false);
     },
+  };
+
+  const clear = () => {
+    setLoading(false);
+    setError("");
+    setMessage("");
   };
 
   useEffect(() => {
@@ -175,5 +186,14 @@ export const useTasks = (type) => {
     }
   }, []);
 
-  return { task, loading, data: tasks, taskData, pinnedTasks, error, message };
+  return {
+    task,
+    loading,
+    data: tasks,
+    taskData,
+    pinnedTasks,
+    error,
+    message,
+    clear,
+  };
 };

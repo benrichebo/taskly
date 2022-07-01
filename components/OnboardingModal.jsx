@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import ForgotPassword from ".//forms/ForgotPassword";
 import Login from "./forms/Login";
 import SignUp from ".//forms/SignUp";
+import { useUser } from "../hooks/useUser";
 
 function OnboardingModal() {
-  const [page, setPage] = useState("login")
+  const [page, setPage] = useState("login");
+  const { clear } = useUser();
   return (
     <div className="modal fade" role="dialog" tabIndex="-1" id="onboarding">
       <div
@@ -21,7 +23,8 @@ function OnboardingModal() {
               type="button"
               className="btn-close rounded p-3 bg-light"
               data-bs-dismiss="modal"
-              aria-label="Close"></button>
+              aria-label="Close"
+              onSubmit={clear}></button>
           </div>
           {page == "login" && <Login setPage={setPage} />}
           {page == "signUp" && <SignUp setPage={setPage} />}

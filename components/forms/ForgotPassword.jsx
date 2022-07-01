@@ -6,18 +6,12 @@ import Email from "../ui/Email";
 function ForgotPassword({ setPage }) {
   const [email, setEmail] = useState("");
 
-  const { setLoading, setError, loading, message, user, error } = useUser();
+  const { loading, message, user, error, clear } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await user.resetUserPassword({ email }, "/api/v1.1.1/user/account/login");
     message && router.push("/services");
-  };
-
-  const clear = () => {
-    setLoading(false);
-    setError("");
-    setPage("");
   };
 
   return (

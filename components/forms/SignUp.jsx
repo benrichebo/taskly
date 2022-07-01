@@ -8,7 +8,7 @@ function SignUp({ setPage }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setLoading, setError, loading, message, user, error } = useUser();
+  const { loading, message, user, error, clear } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,11 +19,7 @@ function SignUp({ setPage }) {
     message && router.push("/tasks");
   };
 
-  const clear = () => {
-    setLoading(false);
-    setError("");
-    setPage("");
-  };
+ 
 
   return (
     <>

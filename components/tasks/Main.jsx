@@ -16,12 +16,12 @@ function Main({ setTaskData }) {
   const notTodaysTasks = allTasks; //filter and check todays date
   return (
     <>
-      {loading && (
+      {loading && !error && (
         <div className="d-flex justify-content-center align-items-center">
           <Spinner />
         </div>
       )}
-      {error && (
+      {error && !loading && (
         <div className="d-flex justify-content-center align-items-center">
           <div className="text-center">
             <h6 className="text-muted">There was an error loading tasks</h6>

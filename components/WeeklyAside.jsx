@@ -29,7 +29,7 @@ function WeeklyAside({ setAllTasks, setTaskData }) {
                 View all
               </a>
             )}
-            {error && (
+            {error && !loading && (
               <a
                 className="link-warning text-decoration-none"
                 href="#"
@@ -39,7 +39,7 @@ function WeeklyAside({ setAllTasks, setTaskData }) {
             )}
           </div>
         </div>
-        {loading && (
+        {loading && !error && (
           <div className="d-flex justify-content-center align-items-center py-4">
             <Spinner />
           </div>

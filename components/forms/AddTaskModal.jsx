@@ -9,22 +9,16 @@ function AddTaskModal({ taskData }) {
   const [endDate, setEndDate] = useState(taskData?.endDate || "");
   const id = Math.random().toString(36).substring(2, 12);
 
-  const { loading, message, task, error } = useTasks();
+  const { loading, message, task, error, clear } = useTasks();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     //if editing task
     if (taskData) {
       const { id, title, description, startDate, endDate } = taskData;
-      await task.updateTask(
-        { id, title, description, startDate, endDate },
-        `/api/tasks/${id}`
-      );
+      await task.updateTask({ id, title, description, startDate, endDate });
     } else {
-      await task.addTask(
-        { id, title, description, startDate, endDate },
-        "/api/tasks/add-task"
-      );
+      await task.addTask({ id, title, description, startDate, endDate });
     }
 
     if (message) {
@@ -47,12 +41,13 @@ function AddTaskModal({ taskData }) {
               type="button"
               className="btn-close rounded p-3 bg-light"
               data-bs-dismiss="modal"
-              aria-label="Close"></button>
+              aria-label="Close"
+              onSubmit={clear}></button>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="modal-body px-md-3 px-lg-5">
               <div className="my-3">
-                <label className="form-label fs-5 fw-bold" htmlFor="title">
+                <label className="form-label fs-6" htmlFor="title">
                   Title
                 </label>
                 <input
@@ -67,9 +62,7 @@ function AddTaskModal({ taskData }) {
                 />
               </div>
               <div className="my-4">
-                <label
-                  className="form-label fs-5 fw-bold"
-                  htmlFor="description">
+                <label className="form-label fs-6" htmlFor="description">
                   Description
                 </label>
                 <textarea
@@ -85,9 +78,7 @@ function AddTaskModal({ taskData }) {
               </div>
               <div className="my-4 row">
                 <div className="col">
-                  <label
-                    className="form-label fs-5 fw-bold"
-                    htmlFor="start-date">
+                  <label className="form-label fs-6" htmlFor="start-date">
                     Start date
                   </label>
                   <input
@@ -99,7 +90,7 @@ function AddTaskModal({ taskData }) {
                   />
                 </div>
                 <div className="col">
-                  <label className="form-label fs-5 fw-bold" htmlFor="end-date">
+                  <label className="form-label fs-6" htmlFor="end-date">
                     End date
                   </label>
                   <input
@@ -138,12 +129,14 @@ function AddTaskModal({ taskData }) {
                   <button
                     className="btn btn-light btn-lg px-4 rounded me-2"
                     type="button"
-                    data-bs-dismiss="modal">
+                    data-bs-dismiss="modal"
+                    onClick={clear}>
                     Cancel
                   </button>
                   <button
                     className="btn btn-primary btn-lg px-4 rounded"
-                    type="button">
+                    type="submit"
+                    disabled={loading}>
                     {loading ? (
                       <Spinner className="ms-2" />
                     ) : (

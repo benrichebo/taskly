@@ -1,6 +1,6 @@
-import { authenticate } from "../authentication";
-import { find, findOne } from "../db/find";
-import { verifyUser } from "../verification";
+import { authenticate } from "../../authentication";
+import { find, findOne } from "../../db/find";
+import { verifyUser } from "../../verification";
 
 export default authenticate(async (req, res) => {
   const { userId, role } = await verifyUser(req);

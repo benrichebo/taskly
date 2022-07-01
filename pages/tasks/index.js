@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AddTaskModal from "../../components/forms/AddTaskModal";
-import { MdAdd, MdEast } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import Layout from "../../components/Layout";
 import AddAttendeeModal from "../../components/forms/AddAttendeeModal";
 import UserAside from "../../components/UserAside";

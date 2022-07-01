@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
-import { findOne } from "../db/find";
-import { insertToArray, removeFromArray } from "../db/update";
-import { verifyUser } from "../verification";
+import { findOne } from "../../db/find";
+import { insertToArray, removeFromArray } from "../../db/update";
+import { verifyUser } from "../../verification";
 
 export default async (req, res) => {
   const { userId } = await verifyUser(req);

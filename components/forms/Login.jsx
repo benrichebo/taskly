@@ -10,7 +10,7 @@ function Login({ setPage }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setLoading, setError, loading, message, user, error } = useUser();
+  const { loading, message, user, error, clear } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,12 +19,6 @@ function Login({ setPage }) {
       "/api/account/login"
     );
     message && router.push("/tasks");
-  };
-
-  const clear = () => {
-    setLoading(false);
-    setError("");
-    setPage("");
   };
 
   return (

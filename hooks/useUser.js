@@ -117,6 +117,12 @@ export const useUser = (type) => {
     },
   };
 
+   const clear = () => {
+     setLoading(false);
+     setError("");
+     setMessage("");
+   };
+
   useEffect(() => {
     if (type == "user") {
       const data = sessionStorage.getItem("user");
@@ -128,5 +134,5 @@ export const useUser = (type) => {
     }
   }, [userData]);
 
-  return { user, userData, message, loading, error, setLoading, setError };
+  return { user, userData, message, loading, error, clear };
 };

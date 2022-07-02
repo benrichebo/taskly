@@ -73,7 +73,7 @@ function SignUp({ setPage }) {
               {loading ? (
                 <Spinner className="ms-2" />
               ) : (
-                <span className="">Sign up</span>
+                <span className="">Register</span>
               )}
             </button>
           </div>
